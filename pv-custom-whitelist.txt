@@ -1,0 +1,6 @@
+##Custom Whitlist for pihole management
+
+#Crunchyroll Whitelist URLs
+#updated 2-16-2021 - sourced from post (https://www.reddit.com/r/pihole/comments/cid3t8/blocking_crunchyroll_ads_solved/)
+5fd74.v.fwmrm.net
+a-vrv.akamaized.net
