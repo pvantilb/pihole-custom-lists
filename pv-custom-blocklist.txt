@@ -21,3 +21,4 @@
 0.0.0.0 ytstatic.l.google.com
 0.0.0.0 api.segment.io
 0.0.0.0 segment.io
+0.0.0.0 tiktok.com
