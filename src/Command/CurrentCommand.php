@@ -8,8 +8,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 
-#[AsCommand(name: 'app:about')]
-class AboutCommand extends Command
+#[AsCommand(name: 'app:current-list')]
+class CurrentCommand extends Command
 {
     private $io;
 
@@ -21,7 +21,7 @@ class AboutCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setName('about')
+            ->setName('current-list')
             ->setDescription('Shows a short information about Composer.')
             ->setHelp(
                 <<<EOT

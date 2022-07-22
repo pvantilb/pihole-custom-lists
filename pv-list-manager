@@ -1,0 +1,51 @@
+#!/usr/bin/env php
+<?php
+// pv-list-manager.php
+
+#use Symfony\Component\Console\Application;
+#use App\Command\AboutCommand;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Console\Application;
+
+/**
+ * Determine vendor directory.
+ */
+$vendorDirectory = '';
+
+if (file_exists(__DIR__.'/../../autoload.php')) {
+    $vendorDirectory = __DIR__.'/../..';
+} elseif (file_exists(__DIR__.'/vendor/autoload.php')) {
+    $vendorDirectory = __DIR__.'/vendor';
+}
+
+if (empty($vendorDirectory)) {
+    throw new \RuntimeException('Unable to find vendor directory');
+}
+
+require $vendorDirectory.'/autoload.php';
+
+$container = new ContainerBuilder();
+
+// Load manual parameters
+$container->setParameter('application_directory', __DIR__);
+$container->setParameter('vendor_directory', $vendorDirectory);
+
+// Load container configuration
+$loader = new YamlFileLoader($container, new FileLocator());
+$loader->load(__DIR__.'/config/services.yml');
+
+// Compile container
+$container->compile();
+
+// Start the console application.
+exit($container->get(Application::class)->run());
+
+/*$application = new Application();
+
+// ... register commands
+
+$application->add(new AboutCommand());
+$application->run();
+*/

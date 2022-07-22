@@ -1,0 +1,33 @@
+parameters:
+  version: '0.1'
+
+services:
+  _defaults:
+    autowire: true
+
+  _instanceof:
+    Symfony\Component\Console\Command\Command:
+      tags: ['command']
+
+  Console\:
+    lazy: true
+    resource: '../src'
+
+  Console\Application:
+    public: true
+    arguments:
+      - !tagged command
+
+  Symfony\Component\Filesystem\:
+    resource: '%vendor_directory%/symfony/filesystem'
+
+  # PvListManager\Cli\:
+  #   lazy: true
+  #   resource: '../src'
+
+  # PvListManager\Cli\Application:
+  #   public: true
+  #   arguments:
+  #     - tags: ['not-command']
+    #calls:
+    #  - setDispatcher: ['@Ymir\Cli\EventDispatcher\AutowiredEventDispatcher']
