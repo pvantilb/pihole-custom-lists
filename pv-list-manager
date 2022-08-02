@@ -7,7 +7,7 @@
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-use Console\Application;
+use PvListManager\Application;
 
 /**
  * Determine vendor directory.

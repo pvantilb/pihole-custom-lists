@@ -1,6 +1,6 @@
 <?php
 
-namespace Console\Command;
+namespace PvListManager\Command;
 
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -22,10 +22,13 @@ class AboutCommand extends Command
     {
         $this
             ->setName('about')
-            ->setDescription('Shows a short information about Composer.')
+            ->setDescription('pv-list-manager allows for cli management of lists for pihole')
             ->setHelp(
                 <<<EOT
-<info>php composer.phar about</info>
+<info>>pv-list-manager help about</info>
+<comment>The pv-list-manager cli app is for managing a custom list for pi-hole DNS sinkhole.
+    It allows for defining and aggregating multiple sources into a single master that you
+    can then configure pi-hole to use to reduce clutter in the list management screen.</comment>
 EOT
             )
         ;
@@ -36,7 +39,9 @@ EOT
         $output->writeln(
             <<<EOT
 <info>PV List Manager - Peter's Pi-Hole list manager app</info>
-<comment>This is a simple cli app for managing/colsolidating adlists for easier pi-hole management.</comment>
+<comment>The pv-list-manager cli app is for managing a custom list for pi-hole DNS sinkhole.
+It allows for defining and aggregating multiple sources into a single master that you
+can then configure pi-hole to use to reduce clutter in the list management screen.</comment>
 EOT
         );
 

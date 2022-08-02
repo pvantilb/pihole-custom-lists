@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Console;
+namespace PvListManager;
 
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -21,9 +21,9 @@ class Application extends BaseApplication
     /**
      * Constructor.
      */
-    public function __construct(iterable $commands)
+    public function __construct(iterable $commands, string $version)
     {
-        parent::__construct('Console');
+        parent::__construct('PvListManager', $version);
 
         foreach ($commands as $command) {
             $this->add($command);

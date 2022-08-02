@@ -1,25 +1,32 @@
 parameters:
   version: '0.1'
+  cli_configuration_path: '../config/lists_config.yml'
 
 services:
   _defaults:
     autowire: true
+    bind:
+      string $version: '%version%'
 
   _instanceof:
     Symfony\Component\Console\Command\Command:
       tags: ['command']
 
-  Console\:
+  PvListManager\:
     lazy: true
     resource: '../src'
 
-  Console\Application:
+  PvListManager\Application:
     public: true
     arguments:
       - !tagged command
 
   Symfony\Component\Filesystem\:
     resource: '%vendor_directory%/symfony/filesystem'
+
+  PvListManager\CliConfiguration:
+    arguments:
+      $configurationFilePath: '%cli_configuration_filepath%'
 
   # PvListManager\Cli\:
   #   lazy: true

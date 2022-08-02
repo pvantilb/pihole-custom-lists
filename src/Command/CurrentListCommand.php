@@ -1,6 +1,6 @@
 <?php
 
-namespace Console\Command;
+namespace PvListManager\Command;
 
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -9,7 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 
 #[AsCommand(name: 'app:current-list')]
-class CurrentCommand extends Command
+class CurrentListCommand extends Command
 {
     private $io;
 
@@ -22,10 +22,11 @@ class CurrentCommand extends Command
     {
         $this
             ->setName('current-list')
-            ->setDescription('Shows a short information about Composer.')
+            ->setDescription('Shows information about the current list')
             ->setHelp(
                 <<<EOT
-<info>php composer.phar about</info>
+<info>The current list commend shows information about the current aggregate list</info>
+<comment>command to be built and details filled out</comment>
 EOT
             )
         ;

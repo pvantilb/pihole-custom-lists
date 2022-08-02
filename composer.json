@@ -5,6 +5,7 @@
     "prefer-stable": true,
     "require": {
         "php": ">=8.1",
+        "psr/log": "3.*",
         "symfony/config": "6.1.*",
         "symfony/console": "6.1.*",
         "symfony/dependency-injection": "6.1.*",
@@ -21,7 +22,7 @@
             "symfony/flex": true,
             "symfony/runtime": true
         },
-        "optimize-autoloader": true,
+        "optimize-autoloader": false,
         "preferred-install": {
             "*": "dist"
         },
@@ -29,7 +30,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Console\\": "src/"
+            "PvListManager\\": "src/"
         },
         "classmap": ["src"]
     },
