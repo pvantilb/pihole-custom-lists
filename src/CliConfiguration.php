@@ -13,9 +13,10 @@ declare(strict_types=1);
 
 namespace PvListManager;
 
-//use Illuminate\Support\Collection;
+use Illuminate\Support\Collection;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Yaml\Yaml;
 
 class CliConfiguration
 {
@@ -36,9 +37,16 @@ class CliConfiguration
     /**
      * The configuration options.
      *
-     * @var Collection
+     * @var Array
      */
     private $options;
+
+    /**
+     * Control if config file is written everytime object is destroyed
+     *
+     * @var bool
+     */
+    private $doWrite = false;
 
     /**
      * Constructor.
@@ -55,7 +63,10 @@ class CliConfiguration
      */
     public function __destruct()
     {
-        $this->filesystem->dumpFile($this->configurationFilePath, (string) json_encode($this->options, JSON_PRETTY_PRINT));
+        if($this->doWrite)
+        {
+            $this->filesystem->dumpFile($this->configurationFilePath, (string) Yaml::dump($this->options, 3, 2));
+        }
     }
 
     /**
@@ -70,6 +81,28 @@ class CliConfiguration
         }
 
         return $token;
+    }
+
+    public function getConfigParamCount(): int
+    {
+        return count($this->options);
+        //return 0;
+    }
+
+    public function getOptions()
+    {
+        /*$rtn = '';
+
+        if(is_iterable($this->options))
+        {
+            $rtn = '\n';
+
+            foreach ($this->options as $k => $v) {
+                $rtn .= 'Key: '. $k . ' - value: ' . $v;
+            }
+        }*/
+
+        return $this->options;
     }
 
     /**
@@ -133,7 +166,15 @@ class CliConfiguration
      */
     private function get(string $option, $default = null)
     {
-        return $this->options->get($option, $default);
+        $val = '';
+        try {
+            $val = $this->options[$option];
+        } catch (\Throwable $th) {
+            //throw $th;
+            throw new RuntimeException(sprintf('Error trying to get item "%s" with message %s', $option, $th->getMessage()));
+        }
+
+        return $val;
     }
 
     /**
@@ -141,18 +182,20 @@ class CliConfiguration
      */
     private function has(string $option): bool
     {
-        return $this->options->has($option);
+        return $this->options[$option];
     }
 
     /**
      * Load the options from the configuration file.
      */
-    private function load(string $configurationFilePath)//: Collection
+    private function load(string $configurationFilePath)
     {
         $configuration = [];
 
         if ($this->filesystem->exists($configurationFilePath)) {
-            $configuration = json_decode((string) file_get_contents($configurationFilePath), true);
+            var_dump($configurationFilePath);
+            $configuration = Yaml::parse(file_get_contents($configurationFilePath));
+            var_dump($configuration);
         }
 
         return $configuration;

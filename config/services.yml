@@ -1,6 +1,6 @@
 parameters:
   version: '0.1'
-  cli_configuration_path: '../config/lists_config.yml'
+  cli_configuration_path: 'config/lists_config.yml'
 
 services:
   _defaults:
@@ -26,7 +26,8 @@ services:
 
   PvListManager\CliConfiguration:
     arguments:
-      $configurationFilePath: '%cli_configuration_filepath%'
+      $configurationFilePath: '%cli_configuration_path%'
+
 
   # PvListManager\Cli\:
   #   lazy: true

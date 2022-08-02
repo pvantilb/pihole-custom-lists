@@ -1,0 +1,8 @@
+app:
+  listStorage: ./lists
+  lists:
+    allowlist: pv-customer-allowlist.txt
+    blocklist: pv-custom-blocklist.txt
+  sources:
+    source1: 'http://www.example.com'
+    source2: 'http://www.github.com'
