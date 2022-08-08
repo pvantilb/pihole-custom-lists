@@ -21,28 +21,28 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 //use Symfony\Component\Console\Output\OutputInterface as SymfonyOutputInterface;
-use PvListManager\CliConfiguration;
+use PvListManager\Service\SettingsService;
 
 abstract class AbstractCommand extends Command
 {
     /**
      * The global Ymir CLI configuration.
      *
-     * @var CliConfiguration
+     * @var SettingsService
      */
-    protected $cliConfiguration;
+    protected $settings;
 
     /**
      * Constructor.
      */
-    public function __construct(CliConfiguration $cliConfiguration)
+    public function __construct(SettingsService $setSvc)
     {
-        $this->cliConfiguration = $cliConfiguration;
+        $this->settings = $setSvc;
 
         //not using custom input definition
         //$this->setDefinition(new InputDefinition());
 
-        $this->configure();
+        //$this->configure();
 
         parent::__construct();
     }

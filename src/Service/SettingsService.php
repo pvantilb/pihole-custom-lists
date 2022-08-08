@@ -1,24 +1,20 @@
 <?php
 
-declare(strict_types=1);
 
-/*
- * This file is part of Ymir command-line tool.
- *
- * (c) Carl Alexander <support@ymirapp.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
-namespace PvListManager;
+namespace PvListManager\Service;
 
 use Illuminate\Support\Collection;
 use Symfony\Component\Console\Exception\RuntimeException;
+use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Config\Definition\Processor;
+use PvListManager\Application;
+use PvListManager\Config\SettingsConfiguration;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class CliConfiguration
+
+class SettingsService
 {
     /**
      * The path to the configuration file.
@@ -41,12 +37,7 @@ class CliConfiguration
      */
     private $options;
 
-    /**
-     * Control if config file is written everytime object is destroyed
-     *
-     * @var bool
-     */
-    private $doWrite = false;
+    private $optionsArray;
 
     /**
      * Constructor.
@@ -56,6 +47,14 @@ class CliConfiguration
         $this->configurationFilePath = $configurationFilePath;
         $this->filesystem = $filesystem;
         $this->options = $this->load($configurationFilePath);
+
+        /*try {
+            $this->validateConfig();
+        } catch(\Throwable $th)
+        {
+            throw new InvalidArgumentException(sprintf('Error in configuration: %s', $th->getMessage()),$th->getCode(), $th);
+        }*/
+
     }
 
     /**
@@ -63,9 +62,23 @@ class CliConfiguration
      */
     public function __destruct()
     {
-        if($this->doWrite)
+        // do not do write
+        // if($this->doWrite)
+        // {
+        //     $this->filesystem->dumpFile($this->configurationFilePath, (string) Yaml::dump($this->options, 3, 2));
+        // }
+    }
+
+    public function validateConfig()
+    {
+        $processor = new Processor();
+        $listManagerConfig = new SettingsConfiguration();
+
+        try {
+            $processedConfig = $processor->processConfiguration($listManagerConfig, $this->optionsArray);
+        } catch(\Throwable $th)
         {
-            $this->filesystem->dumpFile($this->configurationFilePath, (string) Yaml::dump($this->options, 3, 2));
+            throw new InvalidArgumentException(sprintf('Error in configuration: %s', $th->getMessage()),$th->getCode(), $th);
         }
     }
 
@@ -85,11 +98,11 @@ class CliConfiguration
 
     public function getConfigParamCount(): int
     {
-        return count($this->options);
+        return count((array)$this->options);
         //return 0;
     }
 
-    public function getOptions()
+    public function getOptions(bool $asArray = false)
     {
         /*$rtn = '';
 
@@ -102,63 +115,14 @@ class CliConfiguration
             }
         }*/
 
-        return $this->options;
-    }
-
-    /**
-     * Get the CLI version on GitHub.
-     */
-    public function getGitHubCliVersion(): string
-    {
-        return (string) $this->get('github_cli_version');
-    }
-
-    /**
-     * Get the timestamp when GitHub was last checked for a CLI update.
-     */
-    public function getGitHubLastCheckedTimestamp(): int
-    {
-        return (int) $this->get('github_last_checked');
-    }
-
-    /**
-     * Check if the global configuration has an access token.
-     */
-    public function hasAccessToken(): bool
-    {
-        return !empty($this->getAccessToken());
-    }
-
-    /**
-     * Set the access token in the global configuration file.
-     */
-    public function setAccessToken(string $token)
-    {
-        $this->set('token', $token);
-    }
-
-    /**
-     * Set the active team ID in the global configuration file.
-     */
-    public function setActiveTeamId(int $teamId)
-    {
-        $this->set('active_team', $teamId);
-    }
-
-    /**
-     * Set the CLI version on GitHub.
-     */
-    public function setGitHubCliVersion(string $version)
-    {
-        $this->set('github_cli_version', $version);
-    }
-
-    /**
-     * Set the timestamp when GitHub was last checked for a CLI update.
-     */
-    public function setGitHubLastCheckedTimestamp(int $timestamp)
-    {
-        $this->set('github_last_checked', $timestamp);
+        if($asArray)
+        {
+            return $this->optionsArray;
+        }
+        else
+        {
+            return $this->options;
+        }
     }
 
     /**
@@ -168,7 +132,7 @@ class CliConfiguration
     {
         $val = '';
         try {
-            $val = $this->options[$option];
+            $val = $this->optionsArray[$option];
         } catch (\Throwable $th) {
             //throw $th;
             throw new RuntimeException(sprintf('Error trying to get item "%s" with message %s', $option, $th->getMessage()));
@@ -180,9 +144,9 @@ class CliConfiguration
     /**
      * Checks if the configuration has the given option.
      */
-    private function has(string $option): bool
+    public function has(string $option): bool
     {
-        return $this->options[$option];
+        return $this->optionsArray[$option];
     }
 
     /**
@@ -193,9 +157,11 @@ class CliConfiguration
         $configuration = [];
 
         if ($this->filesystem->exists($configurationFilePath)) {
-            var_dump($configurationFilePath);
-            $configuration = Yaml::parse(file_get_contents($configurationFilePath));
-            var_dump($configuration);
+            //var_dump($configurationFilePath);
+            $fileContentsString = file_get_contents($configurationFilePath);
+            $configuration = Yaml::parse($fileContentsString, Yaml::PARSE_OBJECT_FOR_MAP);
+            $this->optionsArray = Yaml::parse($fileContentsString);
+            //var_dump($configuration);
         }
 
         return $configuration;
@@ -206,6 +172,6 @@ class CliConfiguration
      */
     private function set(string $option, $value)
     {
-        $this->options[$option] = $value;
+        $this->optionsArray[$option] = $value;
     }
 }

@@ -1,8 +1,12 @@
-app:
-  listStorage: ./lists
-  lists:
+list_manager:
+  list_storage_folder: ./lists
+  generated_lists:
     allowlist: pv-customer-allowlist.txt
     blocklist: pv-custom-blocklist.txt
-  sources:
-    source1: 'http://www.example.com'
-    source2: 'http://www.github.com'
+  block_sources:
+    - { name: 'block1', source: 'http://www.example.com'}
+    - { name: 'block2', source: 'http://www.github.com'}
+  allow_sources:
+    - source: 'https://www.allow1.com'
+    - source: 'https://www.allow2.com'
+

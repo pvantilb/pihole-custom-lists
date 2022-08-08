@@ -7,17 +7,24 @@ use PvListManager\Command\AbstractCommand;
 //use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use PvListManager\CliConfiguration;
+use PvListManager\Service\SettingsService;
+use Symfony\Component\Yaml\Yaml;
 
 #[AsCommand(name: 'app:debug')]
 class DebugCommand extends AbstractCommand
 {
     private $io;
-    private $application;
 
-    public function __construct(CliConfiguration $cliConfiguration)
+    /**
+     * Undocumented variable
+     *
+     * @var SettingsService
+     */
+    protected $settings;
+
+    public function __construct(SettingsService $setSvc)
     {
-        parent::__construct($cliConfiguration);
+        parent::__construct($setSvc);
     }
 
     protected function configure(): void
@@ -35,9 +42,20 @@ EOT
     }
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $output->writeln(sprintf('There are a total of %s config parameters set', $this->cliConfiguration->getConfigParamCount()));
-        $output->writeln(sprintf('Lists will be stored here [%s]', $this->cliConfiguration->getOptions()['app.listStorage']));
-        var_dump($this->cliConfiguration->getOptions());
+        $sets = $this->settings->getOptions(true);
+        //var_dump($sets['list_manager']['block_sources']);
+
+        //$output->writeln("There are " . count($sets['list_manager']['block_sources']) . " sources for block lists");
+
+        //Utilize array access for various parameters
+        //build access into getters in SettingsService for ease of use in commands
+        foreach($sets['list_manager']['block_sources'] as $bls)
+        {
+            $output->writeln("Array Block List: " . $bls['name'] . " source [" . $bls['source'] . "]");
+        }
+
+        //$this->cliConfiguration->get('listStorage');
+        //var_dump($this->cliConfiguration->getOptions());
         //$output->writeln(sprintf('Config Param: %s = %s', 'version', $this->application->get_cfg_var('version')));
         //$output->writeln(sprintf('Config Param: %s = %s', 'version', $this->application->get_cfg_var('cli_configuration_path')));
 

@@ -11,28 +11,41 @@ class SettingsConfiguration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder('pvListSettings');
+        $treeBuilder = new TreeBuilder('list_manager');
 
         // ... add node definitions to the root of the tree
         // $treeBuilder->getRootNode()->...
         $treeBuilder->getRootNode()
             ->children()
-                ->scalarNode('listStorageFolder')->defaultValue('lists/')->end()
+                ->scalarNode('list_storage_folder')->defaultValue('lists/')->end()
             ->end()
             ->children()
-                ->arrayNode('generatedLists')
+                ->arrayNode('generated_lists')
                     ->children()
-                        ->scalarNode('allowList')->defaultValue('pv-customer-allowlist.txt')->end()
-                        ->scalarNode('blocklist')->defaultValue('pv-custom-blocklist.txt')->end()
+                        ->scalarNode('allowlist')->defaultValue('custom-allowlist.txt')->end()
+                        ->scalarNode('blocklist')->defaultValue('custom-blocklist.txt')->end()
                     ->end()
-                ->end()
+                ->end() //end generatedLists
             ->end()
             ->children()
-                ->arrayNode('sources')
-                    ->children()
-                        ->scalarNode('source')->end()
+                ->arrayNode('block_sources')
+                    ->arrayPrototype()
+                        ->children()
+                            ->scalarNode('name')->end()
+                            ->scalarNode('source')->end()
+                            ->booleanNode('enabled')->defaultTrue()->end()
+                        ->end()
                     ->end()
-                ->end()
+                ->end() // end block_sources
+                ->arrayNode('allow_sources')
+                    ->arrayPrototype()
+                        ->children()
+                            ->scalarNode('name')->end()
+                            ->scalarNode('source')->end()
+                            ->booleanNode('enabled')->defaultTrue()->end()
+                        ->end()
+                    ->end()
+                ->end()//end allow_sources
             ->end()
 ;
 

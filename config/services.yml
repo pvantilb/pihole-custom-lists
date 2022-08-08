@@ -20,14 +20,14 @@ services:
     public: true
     arguments:
       - !tagged command
+      - \PvListManager\CliConfiguration
 
   Symfony\Component\Filesystem\:
     resource: '%vendor_directory%/symfony/filesystem'
 
-  PvListManager\CliConfiguration:
+  PvListManager\Service\SettingsService:
     arguments:
       $configurationFilePath: '%cli_configuration_path%'
-
 
   # PvListManager\Cli\:
   #   lazy: true

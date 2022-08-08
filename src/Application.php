@@ -13,21 +13,38 @@ declare(strict_types=1);
 
 namespace PvListManager;
 
+use PvListManager\Service\SettingsService;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\ErrorHandler\Debug;
 
 class Application extends BaseApplication
 {
+
+    /**
+     * Undocumented variable
+     *
+     * @var SettingsService
+     */
+    protected $settingsService;
+
     /**
      * Constructor.
      */
-    public function __construct(iterable $commands, string $version)
+    public function __construct(iterable $commands, string $version, SettingsService $settings)
     {
+
+        Debug::enable();
+
+        $this->settingsService = $settings;
+        $this->settingsService->validateConfig();
+
         parent::__construct('PvListManager', $version);
 
         foreach ($commands as $command) {
             $this->add($command);
         }
+
     }
 
     /**
@@ -35,9 +52,10 @@ class Application extends BaseApplication
      */
     public function renderThrowable(\Throwable $exception, OutputInterface $output): void
     {
-        /*if ($exception instanceof CommandCancelledException) {
+        if ($exception instanceof \RuntimeException) {
             return;
-        }*/
+        }
+        //$this->render($exception, $output);
 
         parent::renderThrowable($exception, $output);
     }
