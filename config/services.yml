@@ -5,6 +5,7 @@ parameters:
 services:
   _defaults:
     autowire: true
+    autoconfigure: true
     bind:
       string $version: '%version%'
 
@@ -24,6 +25,11 @@ services:
 
   Symfony\Component\Filesystem\:
     resource: '%vendor_directory%/symfony/filesystem'
+  
+  symfony.Contracts.httpclient.httpclientinterface:
+    class: Symfony\Component\HttpClient\CurlHttpClient
+  
+  Symfony\Contracts\HttpClient\HttpClientInterface: '@symfony.Contracts.httpclient.httpclientinterface'
 
   PvListManager\Service\SettingsService:
     arguments:

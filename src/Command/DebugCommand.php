@@ -4,29 +4,12 @@ namespace PvListManager\Command;
 
 use Symfony\Component\Console\Attribute\AsCommand;
 use PvListManager\Command\AbstractCommand;
-//use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use PvListManager\Service\SettingsService;
-use Symfony\Component\Yaml\Yaml;
 
 #[AsCommand(name: 'app:debug')]
 class DebugCommand extends AbstractCommand
 {
-    private $io;
-
-    /**
-     * Undocumented variable
-     *
-     * @var SettingsService
-     */
-    protected $settings;
-
-    public function __construct(SettingsService $setSvc)
-    {
-        parent::__construct($setSvc);
-    }
-
     protected function configure(): void
     {
         $this
@@ -53,6 +36,13 @@ EOT
         {
             $output->writeln("Array Block List: " . $bls['name'] . " source [" . $bls['source'] . "]");
         }
+
+        $output->writeln("Starting to fetch list...");
+        $list = $this->fetch->getList('test');
+        $output->writeln("List retrieved!");
+        $listResp = $this->fetch->getList('test', true);
+
+        var_dump(explode(PHP_EOL,$list));
 
         //$this->cliConfiguration->get('listStorage');
         //var_dump($this->cliConfiguration->getOptions());

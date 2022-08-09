@@ -11,6 +11,7 @@ use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Config\Definition\Processor;
 use PvListManager\Application;
 use PvListManager\Config\SettingsConfiguration;
+use StringBackedEnum;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 
@@ -83,17 +84,27 @@ class SettingsService
     }
 
     /**
-     * Get the access token from the global configuration file.
+     * Get the storage location for lists.
      */
-    public function getAccessToken(): string
+    public function getStorageLocation(): string
     {
-        $token = getenv('YMIR_API_TOKEN');
+        return $this->optionsArray['list_manager']['list_storage_folder'];
+    }
 
-        if (!is_string($token)) {
-            $token = (string) $this->get('token');
+    public function getGeneratedListName($list = 'allow')
+    {
+        switch ($list) {
+            case 'allow':
+                return $this->optionsArray['list_manager']['generated_lists']['allowlist'];
+                break;
+            case 'block':
+                return $this->optionsArray['list_manager']['generated_lists']['blocklist'];
+                break;
+            default:
+                //default case it to always return allow list
+                return $this->optionsArray['list_manager']['generated_lists']['allowlist'];
+                break;
         }
-
-        return $token;
     }
 
     public function getConfigParamCount(): int
@@ -104,17 +115,6 @@ class SettingsService
 
     public function getOptions(bool $asArray = false)
     {
-        /*$rtn = '';
-
-        if(is_iterable($this->options))
-        {
-            $rtn = '\n';
-
-            foreach ($this->options as $k => $v) {
-                $rtn .= 'Key: '. $k . ' - value: ' . $v;
-            }
-        }*/
-
         if($asArray)
         {
             return $this->optionsArray;

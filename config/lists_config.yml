@@ -1,7 +1,7 @@
 list_manager:
   list_storage_folder: ./lists
   generated_lists:
-    allowlist: pv-customer-allowlist.txt
+    allowlist: pv-custom-allowlist.txt
     blocklist: pv-custom-blocklist.txt
   block_sources:
     - { name: 'block1', source: 'http://www.example.com'}

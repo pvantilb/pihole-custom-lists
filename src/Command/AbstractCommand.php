@@ -20,8 +20,9 @@ use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-//use Symfony\Component\Console\Output\OutputInterface as SymfonyOutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use PvListManager\Service\SettingsService;
+use PvListManager\Service\FetchService;
 
 abstract class AbstractCommand extends Command
 {
@@ -31,13 +32,22 @@ abstract class AbstractCommand extends Command
      * @var SettingsService
      */
     protected $settings;
+    protected $io;
+    protected $fetch;
+
+
+    public function initialize(InputInterface $input, OutputInterface $output)
+    {
+        $this->io = new SymfonyStyle($input, $output);
+    }
 
     /**
      * Constructor.
      */
-    public function __construct(SettingsService $setSvc)
+    public function __construct(SettingsService $setSvc, FetchService $fetchSvc)
     {
         $this->settings = $setSvc;
+        $this->fetch = $fetchSvc;
 
         //not using custom input definition
         //$this->setDefinition(new InputDefinition());
