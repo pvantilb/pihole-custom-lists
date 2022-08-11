@@ -40,6 +40,8 @@ class SettingsService
 
     private $optionsArray;
 
+    private $hasProcessed = false;
+
     /**
      * Constructor.
      */
@@ -47,15 +49,7 @@ class SettingsService
     {
         $this->configurationFilePath = $configurationFilePath;
         $this->filesystem = $filesystem;
-        $this->options = $this->load($configurationFilePath);
-
-        /*try {
-            $this->validateConfig();
-        } catch(\Throwable $th)
-        {
-            throw new InvalidArgumentException(sprintf('Error in configuration: %s', $th->getMessage()),$th->getCode(), $th);
-        }*/
-
+        $this->options = $this->load($this->configurationFilePath);
     }
 
     /**
@@ -77,6 +71,9 @@ class SettingsService
 
         try {
             $processedConfig = $processor->processConfiguration($listManagerConfig, $this->optionsArray);
+            //var_dump($processedConfig);
+            $this->hasProcessed = true;
+            $this->optionsArray = $processedConfig;
         } catch(\Throwable $th)
         {
             throw new InvalidArgumentException(sprintf('Error in configuration: %s', $th->getMessage()),$th->getCode(), $th);
@@ -88,23 +85,46 @@ class SettingsService
      */
     public function getStorageLocation(): string
     {
-        return $this->optionsArray['list_manager']['list_storage_folder'];
+        return $this->optionsArray['list_storage_folder'];
     }
 
-    public function getGeneratedListName($list = 'allow')
+    public function getGeneratedListName($list = 'allow'): string
     {
+        $rtn = '';
+
         switch ($list) {
             case 'allow':
-                return $this->optionsArray['list_manager']['generated_lists']['allowlist'];
+                $rtn = $this->optionsArray['generated_lists']['allowlist'];
                 break;
             case 'block':
-                return $this->optionsArray['list_manager']['generated_lists']['blocklist'];
+                $rtn = $this->optionsArray['generated_lists']['blocklist'];
                 break;
             default:
                 //default case it to always return allow list
-                return $this->optionsArray['list_manager']['generated_lists']['allowlist'];
+                $rtn = $this->optionsArray['generated_lists']['allowlist'];
                 break;
         }
+
+        return $rtn;
+    }
+
+    public function getBlockLists($filterEnabled = false): array
+    {
+        $rtn = [];
+
+        if($filterEnabled)
+        {
+            foreach($this->optionsArray['block_sources'] as $bl)
+            {
+                if($bl['enabled'])
+                {
+                    $rtn = array_merge($rtn, [$bl]);
+                }
+            }
+        } else {
+            $rtn = $this->optionsArray['block_sources'];
+        }
+        return $rtn;
     }
 
     public function getConfigParamCount(): int
@@ -126,30 +146,6 @@ class SettingsService
     }
 
     /**
-     * Get the given configuration option or return the default.
-     */
-    private function get(string $option, $default = null)
-    {
-        $val = '';
-        try {
-            $val = $this->optionsArray[$option];
-        } catch (\Throwable $th) {
-            //throw $th;
-            throw new RuntimeException(sprintf('Error trying to get item "%s" with message %s', $option, $th->getMessage()));
-        }
-
-        return $val;
-    }
-
-    /**
-     * Checks if the configuration has the given option.
-     */
-    public function has(string $option): bool
-    {
-        return $this->optionsArray[$option];
-    }
-
-    /**
      * Load the options from the configuration file.
      */
     private function load(string $configurationFilePath)
@@ -165,13 +161,5 @@ class SettingsService
         }
 
         return $configuration;
-    }
-
-    /**
-     * Set the configuration option.
-     */
-    private function set(string $option, $value)
-    {
-        $this->optionsArray[$option] = $value;
     }
 }

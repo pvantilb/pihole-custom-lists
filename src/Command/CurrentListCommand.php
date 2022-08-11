@@ -57,6 +57,12 @@ EOT
             $this->io->text("The generated block list does NOT exist!");
         }
 
+        foreach($set->getBlockLists(true) as $bl)
+        {
+            //var_dump($bl);
+            $this->io->text("List item: " . $bl['name'] . " :: [" . $bl['source'] . "]");
+        }
+
         return AbstractCommand::SUCCESS;
     }
 }

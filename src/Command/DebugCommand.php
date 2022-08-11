@@ -32,7 +32,7 @@ EOT
 
         //Utilize array access for various parameters
         //build access into getters in SettingsService for ease of use in commands
-        foreach($sets['list_manager']['block_sources'] as $bls)
+        foreach($sets['block_sources'] as $bls)
         {
             $output->writeln("Array Block List: " . $bls['name'] . " source [" . $bls['source'] . "]");
         }
