@@ -127,10 +127,23 @@ class SettingsService
         return $rtn;
     }
 
-    public function getConfigParamCount(): int
+    public function getAllowLists($filterEnabled = false): array
     {
-        return count((array)$this->options);
-        //return 0;
+        $rtn = [];
+
+        if($filterEnabled)
+        {
+            foreach($this->optionsArray['allow_sources'] as $bl)
+            {
+                if($bl['enabled'])
+                {
+                    $rtn = array_merge($rtn, [$bl]);
+                }
+            }
+        } else {
+            $rtn = $this->optionsArray['allow_sources'];
+        }
+        return $rtn;
     }
 
     public function getOptions(bool $asArray = false)

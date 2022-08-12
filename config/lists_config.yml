@@ -8,6 +8,6 @@ list_manager:
     - { name: 'block2', source: 'http://www.github.com', enabled: false}
     - { name: 'block3', source: 'http://www.source.com', enabled: true}
   allow_sources:
-    - source: 'https://www.allow1.com'
-    - source: 'https://www.allow2.com'
+    - { name: 'allow1', source: 'https://www.allow1.com'}
+    - { name: 'allow2', source: 'https://www.allow2.com'}
 
