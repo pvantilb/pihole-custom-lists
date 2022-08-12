@@ -21,7 +21,6 @@ class AboutCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setName('about')
             ->setDescription('pv-list-manager allows for cli management of lists for pihole')
             ->setHelp(
                 <<<EOT

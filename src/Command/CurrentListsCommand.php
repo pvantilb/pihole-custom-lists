@@ -9,17 +9,17 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
 
-#[AsCommand(name: 'app:current-list')]
-class CurrentListCommand extends AbstractCommand
+#[AsCommand(name: 'app:current-lists')]
+class CurrentListsCommand extends AbstractCommand
 {
     protected function configure(): void
     {
         $this
-            ->setName('current-list')
-            ->setDescription('Shows information about the current list')
+            //->setName('current-lists')
+            ->setDescription('Shows information about the current lists')
             ->setHelp(
                 <<<EOT
-<info>The current list commend shows information about the current aggregate list</info>
+<info>The current list command shows information about the current lists configuration</info>
 <comment>command to be built and details filled out</comment>
 EOT
             )

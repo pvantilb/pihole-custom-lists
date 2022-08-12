@@ -13,7 +13,6 @@ class DebugCommand extends AbstractCommand
     protected function configure(): void
     {
         $this
-            ->setName('debug')
             ->setDescription('debug operations for the application')
             ->setHelp(
                 <<<EOT
