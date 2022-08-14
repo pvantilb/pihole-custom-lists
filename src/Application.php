@@ -15,7 +15,9 @@ namespace PvListManager;
 
 use PvListManager\Service\SettingsService;
 use Symfony\Component\Console\Application as BaseApplication;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\ErrorHandler\Debug;
 
 class Application extends BaseApplication
@@ -45,6 +47,15 @@ class Application extends BaseApplication
             $this->add($command);
         }
 
+    }
+
+    protected function configureIO(InputInterface $input, OutputInterface $output)
+    {
+        //create new styles for use in output
+        $output->getFormatter()->setStyle('test', 
+            new OutputFormatterStyle('yellow', 'blue', ['bold', 'underscore']));
+
+        parent::configureIO($input, $output);
     }
 
     /**

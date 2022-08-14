@@ -8,6 +8,9 @@ use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\String\ByteString;
+use Symfony\Component\String\UnicodeString;
+
 
 
 #[AsCommand(name: 'app:current-lists')]
@@ -54,13 +57,23 @@ EOT
             '-'
             ]
         ]);
+
+        $chkBox = UnicodeString::fromCodePoints(0x2704);
+        $xMark = UnicodeString::fromCodePoints(0x2718);
+        $bs = new ByteString("\x68\x65\x6C\x6C\x6F");
+
+        $this->io->writeln($bs);
+
         $table->addRows([
             ['generated',
             'block',
             $set->getGeneratedListName('block'),
             (int)($fs->exists($set->getStorageLocation() . '/' . $set->getGeneratedListName('block'))),
             '-',
-            '-'
+            '-',
+            '✓', $chkBox,
+            "<test>" . $xMark . "</>",
+            "<fg=red;options=bold,underscore>" . new UnicodeString("\u{10102}") . "</>"
             ]
         ]);
 
