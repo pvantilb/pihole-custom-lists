@@ -4,6 +4,7 @@ namespace PvListManager\Command;
 
 use Symfony\Component\Console\Attribute\AsCommand;
 use PvListManager\Command\AbstractCommand;
+use PvListManager\Enum\OutputSymbols;
 use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -58,8 +59,10 @@ EOT
             ]
         ]);
 
-        $chkBox = UnicodeString::fromCodePoints(0x2704);
-        $xMark = UnicodeString::fromCodePoints(0x2718);
+        //$chkBox = UnicodeString::fromCodePoints(0x2713);
+        $chkBox = new UnicodeString("\u{2713}");
+        //$xMark = UnicodeString::fromCodePoints(0x2718);
+        $xMark = new UnicodeString("\u{2718}");
         $bs = new ByteString("\x68\x65\x6C\x6C\x6F");
 
         $this->io->writeln($bs);
@@ -71,9 +74,9 @@ EOT
             (int)($fs->exists($set->getStorageLocation() . '/' . $set->getGeneratedListName('block'))),
             '-',
             '-',
-            '✓', $chkBox,
-            "<test>" . $xMark . "</>",
-            "<fg=red;options=bold,underscore>" . new UnicodeString("\u{10102}") . "</>"
+            '✓', OutputSymbols::getUnicodeString(OutputSymbols::Checkmark),
+             $xMark,
+            new UnicodeString("\u{10102}")
             ]
         ]);
 
