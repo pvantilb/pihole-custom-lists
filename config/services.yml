@@ -5,7 +5,7 @@ parameters:
 services:
   _defaults:
     autowire: true
-    autoconfigure: true
+    #autoconfigure: true
     bind:
       string $version: '%version%'
 
@@ -16,6 +16,9 @@ services:
   PvListManager\:
     lazy: true
     resource: '../src'
+    exclude:
+      - '../src/Enum/'
+      - '../src/Json/'
 
   PvListManager\Application:
     public: true
@@ -24,7 +27,7 @@ services:
 
   Symfony\Component\Filesystem\:
     resource: '%vendor_directory%/symfony/filesystem'
- 
+
   symfony.Contracts.httpclient.httpclientinterface:
     class: Symfony\Component\HttpClient\CurlHttpClient
 

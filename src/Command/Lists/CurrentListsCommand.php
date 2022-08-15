@@ -1,6 +1,6 @@
 <?php
 
-namespace PvListManager\Command;
+namespace PvListManager\Command\Lists;
 
 use Symfony\Component\Console\Attribute\AsCommand;
 use PvListManager\Command\AbstractCommand;
@@ -9,12 +9,9 @@ use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\String\ByteString;
-use Symfony\Component\String\UnicodeString;
 
 
-
-#[AsCommand(name: 'app:current-lists')]
+#[AsCommand(name: 'lists:current')]
 class CurrentListsCommand extends AbstractCommand
 {
     protected function configure(): void
@@ -32,15 +29,8 @@ EOT
     }
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-
         $this->io->title("Current Lists");
-        $this->io->text("<comment>Currently defined lists for pi-hole are below</>");
-        /*$output->writeln(
-            <<<EOT
-<info></info>
-<comment>This is a simple cli app for managing/colsolidating adlists for easier pi-hole management.</comment>
-EOT
-        );*/
+        $this->io->text("<comment>Currently defined lists for aggregation to pi-hole are below.</>");
 
         $set = $this->settings;
 

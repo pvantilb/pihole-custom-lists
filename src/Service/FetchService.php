@@ -21,14 +21,15 @@ class FetchService
         $this->client = $client;
     }
 
-    public function getList($url, $asResponse = false): string|ResponseInterface
+    public function getList($url, $rawContent = false): string|array
     {
-        $resp = $this->client->request('GET', 'https://v.firebog.net/hosts/static/w3kbl.txt');
+        $url = 'https://v.firebog.net/hosts/static/w3kbl.txt';
+        $resp = $this->client->request('GET', $url);
 
-        if(!$asResponse) {
+        if($rawContent) {
             return $resp->getContent();
         } else {
-            return $resp;
+            return explode(PHP_EOL,$resp->getContent());
         }
 
     }

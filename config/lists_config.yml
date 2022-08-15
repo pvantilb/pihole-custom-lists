@@ -4,9 +4,9 @@ list_manager:
     allowlist: pv-custom-allowlist.txt
     blocklist: pv-custom-blocklist.txt
   block_sources:
-    - { name: 'block1', source: 'http://www.example.com', enabled: true}
-    - { name: 'block2', source: 'http://www.github.com', enabled: false}
-    - { name: 'block3', source: 'http://www.source.com', enabled: true}
+    - { name: 'suspicious_hosts_1', source: 'https://v.firebog.net/hosts/static/w3kbl.txt', enabled: true}
+    - { name: 'suspicious_hosts_2', source: 'https://v.firebog.net/hosts/neohostsbasic.txt', enabled: true}
+    - { name: 'block3', source: 'http://www.source.com', enabled: false}
   allow_sources:
     - { name: 'allow1', source: 'https://www.allow1.com'}
     - { name: 'allow2', source: 'https://www.allow2.com'}

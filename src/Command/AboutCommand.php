@@ -3,20 +3,14 @@
 namespace PvListManager\Command;
 
 use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Command\Command;
+use PvListManager\Command\AbstractCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 
-#[AsCommand(name: 'app:about')]
-class AboutCommand extends Command
+#[AsCommand(name: 'about')]
+class AboutCommand extends AbstractCommand
 {
-    private $io;
-
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     protected function configure(): void
     {
@@ -44,6 +38,6 @@ can then configure pi-hole to use to reduce clutter in the list management scree
 EOT
         );
 
-        return Command::SUCCESS;
+        return AbstractCommand::SUCCESS;
     }
 }

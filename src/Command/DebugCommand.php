@@ -7,7 +7,7 @@ use PvListManager\Command\AbstractCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-#[AsCommand(name: 'app:debug')]
+#[AsCommand(name: 'debug')]
 class DebugCommand extends AbstractCommand
 {
     protected function configure(): void
@@ -38,10 +38,12 @@ EOT
 
         $output->writeln("Starting to fetch list...");
         $list = $this->fetch->getList('test');
-        $output->writeln("List retrieved!");
-        $listResp = $this->fetch->getList('test', true);
 
-        var_dump(explode(PHP_EOL,$list));
+        var_dump(count($list));
+        //All empty lines in fetched list
+        var_dump(array_keys($list, ''));
+        //All lines that are comments
+        var_dump(array_keys($list, '#', false));
 
         //$this->cliConfiguration->get('listStorage');
         //var_dump($this->cliConfiguration->getOptions());
