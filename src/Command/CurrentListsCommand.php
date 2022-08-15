@@ -54,16 +54,10 @@ EOT
             'allow',
             $set->getGeneratedListName('allow'),
             (int)($fs->exists($set->getStorageLocation() . '/' . $set->getGeneratedListName('allow'))),
-            '-',
-            '-'
+            OutputSymbols::getUnicodeString(OutputSymbols::Dash),
+            OutputSymbols::getUnicodeString(OutputSymbols::Dash)
             ]
         ]);
-
-        //$chkBox = UnicodeString::fromCodePoints(0x2713);
-        $chkBox = new UnicodeString("\u{2713}");
-        //$xMark = UnicodeString::fromCodePoints(0x2718);
-        $xMark = new UnicodeString("\u{2718}");
-        $bs = new ByteString("\x68\x65\x6C\x6C\x6F");
 
         $this->io->writeln($bs);
 
@@ -72,11 +66,8 @@ EOT
             'block',
             $set->getGeneratedListName('block'),
             (int)($fs->exists($set->getStorageLocation() . '/' . $set->getGeneratedListName('block'))),
-            '-',
-            '-',
-            '✓', OutputSymbols::getUnicodeString(OutputSymbols::Checkmark),
-             $xMark,
-            new UnicodeString("\u{10102}")
+            OutputSymbols::getUnicodeString(OutputSymbols::Dash),
+            OutputSymbols::getUnicodeString(OutputSymbols::Dash)
             ]
         ]);
 
