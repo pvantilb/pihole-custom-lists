@@ -16,6 +16,10 @@ enum OutputSymbols: string
 
     //$bs = new ByteString("\x68\x65\x6C\x6C\x6F");
 
+    public function getString(): ?UnicodeString
+    {
+        return static::getUnicodeString($this);
+    }
 
     public static function getUnicodeString(?self $value): ?UnicodeString
     {

@@ -54,20 +54,18 @@ EOT
             'allow',
             $set->getGeneratedListName('allow'),
             (int)($fs->exists($set->getStorageLocation() . '/' . $set->getGeneratedListName('allow'))),
-            OutputSymbols::getUnicodeString(OutputSymbols::Dash),
-            OutputSymbols::getUnicodeString(OutputSymbols::Dash)
+            OutputSymbols::Dash->getString(),
+            OutputSymbols::Dash->getString()
             ]
         ]);
-
-        $this->io->writeln($bs);
 
         $table->addRows([
             ['generated',
             'block',
             $set->getGeneratedListName('block'),
             (int)($fs->exists($set->getStorageLocation() . '/' . $set->getGeneratedListName('block'))),
-            OutputSymbols::getUnicodeString(OutputSymbols::Dash),
-            OutputSymbols::getUnicodeString(OutputSymbols::Dash)
+            OutputSymbols::Dash->getString(),
+            OutputSymbols::Dash->getString()
             ]
         ]);
 
