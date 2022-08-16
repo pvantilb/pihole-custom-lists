@@ -24,6 +24,7 @@ class SettingsConfiguration implements ConfigurationInterface
                     ->children()
                         ->scalarNode('allowlist')->defaultValue('custom-allowlist.txt')->end()
                         ->scalarNode('blocklist')->defaultValue('custom-blocklist.txt')->end()
+                        ->scalarNode('githost')->end()
                     ->end()
                 ->end() //end generatedLists
             ->end()
